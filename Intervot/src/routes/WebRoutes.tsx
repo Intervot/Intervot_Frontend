@@ -1,8 +1,7 @@
 const WebRoutes = () => {
   return (
     <>
-      <div>웹</div>
-      <div></div>
+      <div className="text-red-500">웹</div>
     </>
   );
 };

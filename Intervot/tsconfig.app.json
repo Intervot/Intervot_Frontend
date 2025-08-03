@@ -23,16 +23,102 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": "./src",
     "paths": {
-      "@/components/*": ["./components/*"],
-      "@/constants/*": ["./constants/*"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/mocks/*": ["./mocks/*"],
-      "@/pages/*": ["./pages/*"],
-      "@/services/*": ["./services/*"],
-      "@/types/*": ["./types/*"],
-      "@/widgets/*": ["./widgets/*"],
-      "@/assets/*": ["./assets/*"],
-      "@/stores/*": ["./stores/*"],
+      "@/shared/components/*": ["./shared/components/*"],
+      "@/shared/hooks/*": ["./shared/hooks/*"],
+      "@/shared/services/*": ["./shared/services/*"],
+      "@/shared/types/*": ["./shared/types/*"],
+      "@/shared/constants/*": ["./shared/constants/*"],
+      "@/shared/widgets/*": ["./shared/widgets/*"],
+      "@/shared/assets/*": ["./shared/assets/*"],
+      "@/shared/stores/*": ["./shared/stores/*"],
+      "@/shared/utils/*": ["./shared/utils/*"],
+
+      "@/app/components/*": ["./app/components/*"],
+      "@/app/pages/*": ["./app/pages/*"],
+      "@/app/hooks/*": ["./app/hooks/*"],
+      "@/app/services/*": ["./app/services/*"],
+      "@/app/types/*": ["./app/types/*"],
+      "@/app/constants/*": ["./app/constants/*"],
+      "@/app/widgets/*": ["./app/widgets/*"],
+      "@/app/assets/*": ["./app/assets/*"],
+      "@/app/stores/*": ["./app/stores/*"],
+      "@/app/utils/*": ["./app/utils/*"],
+
+      "@/web/components/*": ["./web/components/*"],
+      "@/web/pages/*": ["./web/pages/*"],
+      "@/web/hooks/*": ["./web/hooks/*"],
+      "@/web/services/*": ["./web/services/*"],
+      "@/web/types/*": ["./web/types/*"],
+      "@/web/constants/*": ["./web/constants/*"],
+      "@/web/widgets/*": ["./web/widgets/*"],
+      "@/web/assets/*": ["./web/assets/*"],
+      "@/web/stores/*": ["./web/stores/*"],
+      "@/web/utils/*": ["./web/utils/*"],
+
+      "@/components/*": [
+        "./shared/components/*",
+        "./app/components/*",
+        "./web/components/*",
+        "./components/*"
+      ],
+      "@/hooks/*": [
+        "./shared/hooks/*",
+        "./app/hooks/*",
+        "./web/hooks/*",
+        "./hooks/*"
+      ],
+      "@/services/*": [
+        "./shared/services/*",
+        "./app/services/*",
+        "./web/services/*",
+        "./services/*"
+      ],
+      "@/types/*": [
+        "./shared/types/*",
+        "./app/types/*",
+        "./web/types/*",
+        "./types/*"
+      ],
+      "@/constants/*": [
+        "./shared/constants/*",
+        "./app/constants/*",
+        "./web/constants/*",
+        "./constants/*"
+      ],
+      "@/widgets/*": [
+        "./shared/widgets/*",
+        "./app/widgets/*",
+        "./web/widgets/*",
+        "./widgets/*"
+      ],
+      "@/assets/*": [
+        "./shared/assets/*",
+        "./app/assets/*",
+        "./web/assets/*",
+        "./assets/*"
+      ],
+      "@/stores/*": [
+        "./shared/stores/*",
+        "./app/stores/*",
+        "./web/stores/*",
+        "./stores/*"
+      ],
+      "@/pages/*": [
+        "./app/pages/*",
+        "./web/pages/*",
+        "./shared/pages/*",
+        "./pages/*"
+      ],
+      "@/utils/*": [
+        "./shared/utils/*",
+        "./app/utils/*",
+        "./web/utils/*",
+        "./utils/*"
+      ],
+      "@/app/*": ["./app/*"],
+      "@/web/*": ["./web/*"],
+      "@/shared/*": ["./shared/*"],
+
       "@/*": ["./*"]
     }
   },
