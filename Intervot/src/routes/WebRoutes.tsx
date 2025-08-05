@@ -1,3 +1,4 @@
+import LoginPage from "@/web/pages/LoginPage";
 import SignupPage from "@/web/pages/SignupPage";
 import { Route, Routes } from "react-router-dom";
 
@@ -9,6 +10,7 @@ const WebRoutes = () => {
         element={<div className="text-red-500">웹 메인 페이지</div>}
       />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route
         path="*"
         element={
