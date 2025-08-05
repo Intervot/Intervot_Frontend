@@ -24,6 +24,10 @@ const LoginPage = () => {
     navigate("/");
   };
 
+  const handleGoSignupPage = () => {
+    navigate("/signup");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-black px-4 py-12">
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-md p-10">
@@ -91,6 +95,15 @@ const LoginPage = () => {
           >
             로그인
           </button>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={handleGoSignupPage}
+              className="text-sm text-gray-500 hover:text-blue-500"
+            >
+              Sign Up
+            </button>
+          </div>
         </form>
       </div>
     </div>
