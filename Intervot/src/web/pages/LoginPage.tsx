@@ -1,9 +1,12 @@
-import React from "react";
 import { useForm } from "react-hook-form";
-import logo from "@/shared/assets/edited_logo.png";
 import { useNavigate } from "react-router-dom";
 
-type FormData = {
+type LoginForm = {
+  email: string;
+  password: string;
+};
+
+type LoginRequest = {
   email: string;
   password: string;
 };
@@ -13,33 +16,27 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     trigger,
-  } = useForm<FormData>({
+  } = useForm<LoginForm>({
     mode: "onChange", // 입력이 변경될 때마다 유효성 검사
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: LoginRequest) => {
     console.log(data);
     navigate("/");
   };
 
-  const handleGoSignupPage = () => {
-    navigate("/signup");
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black px-4 py-12">
-      <div className="w-full max-w-xl bg-white rounded-2xl shadow-md p-10">
-        <div className="flex justify-center mb-6">
-          <img src={logo} alt="로고" className="w-36 h-auto object-contain" />
-        </div>
-        <h2 className="text-2xl font-bold text-center mb-8">로그인</h2>
-
+    <div className="min-h-screen flex flex-col items-center justify-start">
+      <h1 className="text-3xl font-bold mb-4 mt-30">로그인</h1>
+      <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg border border-gray-200 p-10">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* 이메일 입력 */}
           <div>
-            <label className="block font-medium mb-1">이메일</label>
+            <label className="block font-light text-gray-400 mb-1">
+              이메일
+            </label>
             <input
               type="email"
               placeholder="이메일을 입력해 주세요"
@@ -51,20 +48,23 @@ const LoginPage = () => {
                 },
               })}
               onBlur={() => trigger("email")}
-              className={`w-full p-3 border rounded-md ${
-                errors.email ? "border-red-500" : "border-gray-300"
+              className={`w-full p-3 border rounded-md mb-1 text-gray-700 bg-white border-gray-300 focus:outline-none focus:border-gray-400 focus:ring-0 transition-colors duration-150 ${
+                errors.email ? "border-red-500" : ""
               }`}
             />
             {errors.email && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-sm text-red-500 min-h-[20px]">
                 {errors.email.message}
               </p>
             )}
+            {!errors.email && <div className="min-h-[20px]" />}
           </div>
 
           {/* 비밀번호 입력 */}
           <div>
-            <label className="block font-medium mb-1">비밀번호</label>
+            <label className="block font-light text-gray-400 mb-1">
+              비밀번호
+            </label>
             <input
               type="password"
               placeholder="비밀번호를 입력해 주세요"
@@ -72,38 +72,31 @@ const LoginPage = () => {
                 required: "비밀번호는 필수 입력값입니다.",
               })}
               onBlur={() => trigger("password")}
-              className={`w-full p-3 border rounded-md ${
-                errors.password ? "border-red-500" : "border-gray-300"
+              className={`w-full p-3 border rounded-md mb-1 text-gray-700 bg-white border-gray-300 focus:outline-none focus:border-gray-400 focus:ring-0 transition-colors duration-150 ${
+                errors.password ? "border-red-500" : ""
               }`}
             />
             {errors.password && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-sm text-red-500 min-h-[20px]">
                 {errors.password.message}
               </p>
             )}
+            {!errors.password && <div className="min-h-[20px]" />}
           </div>
 
           {/* 로그인 버튼 */}
           <button
             type="submit"
-            disabled={!isValid}
-            className={`w-full py-3 rounded-md text-white ${
-              isValid
-                ? "bg-black hover:bg-gray-800"
-                : "bg-gray-300 cursor-not-allowed"
-            }`}
+            disabled={!isValid || isSubmitting}
+            className={`w-full py-3 rounded-md border border-blue-900 text-sm font-medium transition-colors mb-3
+              ${
+                !isValid || isSubmitting
+                  ? "bg-gray-300 text-white border-gray-300 cursor-not-allowed"
+                  : "bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50"
+              }`}
           >
             로그인
           </button>
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={handleGoSignupPage}
-              className="text-sm text-gray-500 hover:text-blue-500"
-            >
-              Sign Up
-            </button>
-          </div>
         </form>
       </div>
     </div>
