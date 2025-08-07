@@ -28,8 +28,16 @@ const SignupPage = () => {
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
 
-  const onSubmit = (data: SignupRequest) => {
-    console.log(data);
+  const onSubmit = (data: SignupForm) => {
+    const { email, nickname, password } = data;
+
+    const signupRequestData: SignupRequest = {
+      email,
+      nickname,
+      password,
+    };
+
+    console.log(signupRequestData);
     navigate("/login");
   };
 
@@ -145,7 +153,7 @@ const SignupPage = () => {
             ) : (
               <div className="min-h-[20px]">
                 {confirmPassword && password === confirmPassword && (
-                  <p className="text-sm font-light text-gray-400">
+                  <p className="text-sm font-light text-green-700">
                     비밀번호가 일치합니다.
                   </p>
                 )}

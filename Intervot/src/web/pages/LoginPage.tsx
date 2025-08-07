@@ -6,11 +6,6 @@ type LoginForm = {
   password: string;
 };
 
-type LoginRequest = {
-  email: string;
-  password: string;
-};
-
 const LoginPage = () => {
   const navigate = useNavigate();
   const {
@@ -22,7 +17,7 @@ const LoginPage = () => {
     mode: "onChange", // 입력이 변경될 때마다 유효성 검사
   });
 
-  const onSubmit = (data: LoginRequest) => {
+  const onSubmit = (data: LoginForm) => {
     console.log(data);
     navigate("/");
   };
