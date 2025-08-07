@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/shared/assets/edited_logo.png";
-import MENUTABS from "../constants/MENUTABS";
+
 import { Link } from "react-router-dom";
+import MENUTABS from "../constants/MENUTABS";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
