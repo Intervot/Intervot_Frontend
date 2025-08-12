@@ -1,6 +1,10 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuthStore } from "@/shared/stores/authStore";
+import { useAuthStore } from "@/shared/stores/userStore";
+import { useMutation } from "@tanstack/react-query";
+import { authService } from "@/shared/services/auth/authServices";
+import axios from "axios";
+import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 
 type LoginForm = {
   email: string;
@@ -8,7 +12,7 @@ type LoginForm = {
 };
 
 const LoginPage = () => {
-  const { login } = useAuthStore();
+  const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
   const {
     register,
@@ -18,16 +22,53 @@ const LoginPage = () => {
   } = useForm<LoginForm>({
     mode: "onChange", // 입력이 변경될 때마다 유효성 검사
   });
+  const { mutate, isPending } = useMutation({
+    mutationFn: authService.login,
+    onSuccess: (response) => {
+      const userInfo = {
+        nickname: response.nickname,
+      };
 
+      const tokens = {
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        accessTokenExpiresAt: response.accessTokenExpiresAt,
+      };
+
+      login(userInfo, tokens);
+
+      navigate("/");
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status === 401) {
+          alert("일치하는 정보가 없습니다.");
+        } else if (status === 500) {
+          alert("서버 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+        } else if (status === 404) {
+          alert("요청한 API를 찾을 수 없습니다.");
+        }
+      } else {
+        alert("예상치 못한 오류가 발생했습니다.");
+      }
+    },
+  });
   const onSubmit = (data: LoginForm) => {
-    console.log(data);
-    // 로그인 로직 구현
-    login();
-    navigate("/");
+    mutate(data);
   };
-
+  if (isPending) {
+    return (
+      <LoadingSpinner
+        overlay={true}
+        size="lg"
+        color="blue"
+        text="로그인중입니다...."
+      />
+    );
+  }
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start">
+    <div className="min-h-screen w-[80%] m-auto flex flex-col items-center justify-start">
       <h1 className="text-3xl font-bold mb-4 mt-30">로그인</h1>
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg border border-gray-200 p-10">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -89,7 +130,7 @@ const LoginPage = () => {
             disabled={!isValid || isSubmitting}
             className={`w-full py-3 rounded-md border border-blue-900 text-sm font-medium transition-colors mb-3
               ${
-                !isValid || isSubmitting
+                !isValid || isSubmitting || isPending
                   ? "bg-gray-300 text-white border-gray-300 cursor-not-allowed"
                   : "bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50"
               }`}

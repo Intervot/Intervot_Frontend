@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import logo from "@/shared/assets/edited_logo.png";
+import logo from "@/shared/assets/png/edited_logo.png";
 import { Link } from "react-router-dom";
 import MENUTABS from "../constants/MENUTABS";
-import { useAuthStore } from "@/shared/stores/authStore";
+import { useAuthStore } from "@/shared/stores/userStore";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { isLoggedIn, logout } = useAuthStore();
-
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const logout = useAuthStore((state) => state.logout);
   // 로그아웃 핸들러
   const handleLogout = () => {
     logout();
@@ -23,12 +23,12 @@ const Header = () => {
         {/* 로고 */}
         <Link
           className="flex items-center cursor-pointer"
-          to={`${isLoggedIn ? "/" : "/login"}`}
+          to={`${isAuthenticated ? "/" : "/login"}`}
         >
           <img src={logo} alt="로고" className="w-20 h-10 object-contain" />
         </Link>
 
-        {isLoggedIn && (
+        {isAuthenticated && (
           <>
             {/* 메뉴탭 */}
             <nav className="flex gap-6 items-center ml-8">
