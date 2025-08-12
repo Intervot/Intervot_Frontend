@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/shared/assets/edited_logo.png";
-
 import { Link } from "react-router-dom";
 import MENUTABS from "../constants/MENUTABS";
+import { useAuthStore } from "@/shared/stores/authStore";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn, logout } = useAuthStore();
 
   // 로그아웃 핸들러
   const handleLogout = () => {
-    // 로그아웃 로직 구현
+    logout();
     navigate("/login");
   };
 
@@ -20,70 +21,78 @@ const Header = () => {
     <header className="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
       <div className="max-w-5xl mx-auto flex items-center px-4 py-3">
         {/* 로고 */}
-        <Link className="flex items-center cursor-pointer" to="/">
+        <Link
+          className="flex items-center cursor-pointer"
+          to={`${isLoggedIn ? "/" : "/login"}`}
+        >
           <img src={logo} alt="로고" className="w-20 h-10 object-contain" />
         </Link>
-        {/* 메뉴탭 */}
-        <nav className="flex gap-6 items-center ml-8">
-          {MENUTABS.map((tab) => {
-            const isActiveTab = location.pathname.startsWith(tab.path);
-            return (
-              <Link
-                key={tab.path}
-                className={`
-                  px-3 py-1 rounded 
-                  ${
-                    isActiveTab
-                      ? "font-bold text-blue-900"
-                      : "font-normal hover:text-blue-900 hover:font-bold"
-                  }
-                `}
-                to={tab.path}
-              >
-                {tab.label}
-              </Link>
-            );
-          })}
-        </nav>
-        {/* 유저 */}
-        <div
-          className="ml-auto relative"
-          onMouseEnter={() => setIsDropdownOpen(true)}
-          onMouseLeave={() => setIsDropdownOpen(false)}
-        >
-          <div className="flex items-center cursor-pointer">
-            <span className="text-gray-700 text-sm mr-2">환영합니다!</span>
-            <span className="text-blue-900 text-sm hover:font-bold transition-all">
-              {/* 추후 nickname으로 변경 */}
-              사용자
-            </span>
-            <span className="text-gray-700 text-sm ml-1">님</span>
-          </div>
 
-          {/* 드롭다운 메뉴 */}
-          <div
-            className={`absolute right-0 top-full w-48 bg-white rounded-md shadow-lg border border-gray-200 py-2 z-50 transition-all duration-200 ease-in-out ${
-              isDropdownOpen
-                ? "opacity-100 transform translate-y-0"
-                : "opacity-0 transform -translate-y-2 pointer-events-none"
-            }`}
-          >
-            <Link
-              to="/mypage"
-              className="block px-4 py-2 text-sm text-gray-700 hover:text-blue-900 hover:bg-gray-100 hover:font-bold transition-all"
+        {isLoggedIn && (
+          <>
+            {/* 메뉴탭 */}
+            <nav className="flex gap-6 items-center ml-8">
+              {MENUTABS.map((tab) => {
+                const isActiveTab = location.pathname.startsWith(tab.path);
+                return (
+                  <Link
+                    key={tab.path}
+                    className={`
+                      px-3 py-1 rounded 
+                      ${
+                        isActiveTab
+                          ? "font-bold text-blue-900"
+                          : "font-normal hover:text-blue-900 hover:font-bold"
+                      }
+                    `}
+                    to={tab.path}
+                  >
+                    {tab.label}
+                  </Link>
+                );
+              })}
+            </nav>
+            {/* 유저 */}
+            <div
+              className="ml-auto relative"
+              onMouseEnter={() => setIsDropdownOpen(true)}
+              onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              마이페이지
-            </Link>
-            <button
-              onClick={() => {
-                handleLogout();
-              }}
-              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-blue-900 hover:bg-gray-100 hover:font-bold transition-all"
-            >
-              로그아웃
-            </button>
-          </div>
-        </div>
+              <div className="flex items-center cursor-pointer">
+                <span className="text-gray-700 text-sm mr-2">환영합니다!</span>
+                <span className="text-blue-900 text-sm hover:font-bold transition-all">
+                  {/* 추후 nickname으로 변경 */}
+                  사용자
+                </span>
+                <span className="text-gray-700 text-sm ml-1">님</span>
+              </div>
+
+              {/* 드롭다운 메뉴 */}
+              <div
+                className={`absolute right-0 top-full w-48 bg-white rounded-md shadow-lg border border-gray-200 py-2 z-50 transition-all duration-200 ease-in-out ${
+                  isDropdownOpen
+                    ? "opacity-100 transform translate-y-0"
+                    : "opacity-0 transform -translate-y-2 pointer-events-none"
+                }`}
+              >
+                <Link
+                  to="/mypage"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:text-blue-900 hover:bg-gray-100 hover:font-bold transition-all"
+                >
+                  마이페이지
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-blue-900 hover:bg-gray-100 hover:font-bold transition-all"
+                >
+                  로그아웃
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </header>
   );
