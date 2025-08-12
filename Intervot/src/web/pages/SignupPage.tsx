@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 type SignupForm = {
   email: string;
@@ -174,6 +174,15 @@ const SignupPage = () => {
           >
             회원가입
           </button>
+
+          <div className="text-center">
+            <p className="text-gray-600">
+              이미 계정이 있으신가요?{" "}
+              <Link to="/login" className="text-blue-900 hover:underline">
+                로그인하러 가기
+              </Link>
+            </p>
+          </div>
         </form>
       </div>
     </div>

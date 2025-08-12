@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuthStore } from "@/shared/stores/authStore";
 
 type LoginForm = {
   email: string;
@@ -7,6 +8,7 @@ type LoginForm = {
 };
 
 const LoginPage = () => {
+  const { login } = useAuthStore();
   const navigate = useNavigate();
   const {
     register,
@@ -19,6 +21,8 @@ const LoginPage = () => {
 
   const onSubmit = (data: LoginForm) => {
     console.log(data);
+    // 로그인 로직 구현
+    login();
     navigate("/");
   };
 
@@ -92,6 +96,16 @@ const LoginPage = () => {
           >
             로그인
           </button>
+
+          {/* 회원가입 링크 */}
+          <div className="text-center">
+            <p className="text-gray-600">
+              계정이 없으신가요?{" "}
+              <Link to="/signup" className="text-blue-900 hover:underline">
+                회원가입
+              </Link>
+            </p>
+          </div>
         </form>
       </div>
     </div>
