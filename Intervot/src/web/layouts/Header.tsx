@@ -13,13 +13,14 @@ const Header = () => {
   const logout = useAuthStore((state) => state.logout);
   // 로그아웃 핸들러
   const handleLogout = () => {
+    setIsDropdownOpen(false);
     logout();
     navigate("/login");
   };
 
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
-      <div className="max-w-5xl mx-auto flex items-center px-4 py-3">
+      <div className="w-[60%] mx-auto flex items-center  py-3">
         {/* 로고 */}
         <Link
           className="flex items-center cursor-pointer"
