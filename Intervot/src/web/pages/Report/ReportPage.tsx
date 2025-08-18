@@ -1,5 +1,6 @@
 import { useLocation, Navigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { mockStrengths, mockWeaknesses } from "@/web/mock/analysisTexts";
 
 interface ReportData {
   answers: string[];
@@ -69,16 +70,8 @@ const ReportPage = () => {
       );
 
       const mockAnalysis: AnalysisResult = {
-        strengths: [
-          "기본 개념에 대한 이해도가 높습니다",
-          "구체적인 예시를 들어 설명하는 능력이 좋습니다",
-          "문제 해결 과정을 체계적으로 제시합니다",
-        ],
-        weaknesses: [
-          "고급 개념에 대한 깊이 있는 이해가 부족합니다",
-          "실무 경험을 바탕으로 한 설명이 미흡합니다",
-          "최신 기술 트렌드에 대한 인식이 부족합니다",
-        ],
+        strengths: mockStrengths,
+        weaknesses: mockWeaknesses,
         totalScore,
         maxScore,
         scoreBreakdown,
