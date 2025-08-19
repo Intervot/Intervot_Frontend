@@ -2,12 +2,13 @@ import LoginPage from "@/web/pages/auth/LoginPage";
 import SignupPage from "@/web/pages/auth/SignupPage";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/shared/stores/userStore";
-import InterviewPage from "@/web/pages/InterviewPage";
-import ReportPage from "@/web/pages/ReportPage";
+import ReportPage from "@/web/pages/Report/ReportPage";
 import MypagePage from "@/web/pages/MypagePage";
 import { ReactNode, useEffect } from "react";
 import Header from "@/web/layouts/Header";
 import ErrorPage from "@/shared/pages/ErrorPage";
+import InterviewSetupPage from "@/web/pages/Interview/InterviewSetupPage";
+import InterviewPage from "@/web/pages/Interview/InterviewPage";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -53,15 +54,16 @@ const WebRoutes = () => {
           element={<div className="text-red-500">웹 메인 페이지</div>}
         />
         <Route
-          path="/interview"
+          path="/interview_setup"
           element={
             isAuthenticated ? (
-              <InterviewPage />
+              <InterviewSetupPage />
             ) : (
               <Navigate to="/login" replace />
             )
           }
         />
+        <Route path="/interview/:role/:level" element={<InterviewPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route
           path="/mypage"
@@ -83,7 +85,7 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   return (
     <main>
       <Header />
-      <div className="flex-1">{children}</div>
+      <div className="flex-1 w-[60%] mx-auto min-h-[684px]">{children}</div>
     </main>
   );
 };

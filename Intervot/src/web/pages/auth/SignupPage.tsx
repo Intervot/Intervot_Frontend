@@ -42,10 +42,13 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start mb-30">
-      <h1 className="text-3xl font-bold mb-4 mt-20">회원가입</h1>
+    <div className="w-[80%] mx-auto in-h-screen flex flex-col items-center justify-start mb-30">
+      <div className="mx-auto w-[50%] text-3xl font-bold mb-10 mt-15">
+        <h1>환영합니다!</h1>
+        <h1>당신의 취업을 응원합니다.</h1>
+      </div>
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg border border-gray-200 p-10">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
           {/* 이메일 */}
           <div>
             <label className="block font-light text-gray-400 mb-1">
@@ -169,7 +172,7 @@ const SignupPage = () => {
               ${
                 !isValid || isSubmitting
                   ? "bg-gray-300 text-white border-gray-300 cursor-not-allowed"
-                  : "bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50"
+                  : "bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50 cursor-pointer"
               }`}
           >
             회원가입
@@ -178,7 +181,10 @@ const SignupPage = () => {
           <div className="text-center">
             <p className="text-gray-600">
               이미 계정이 있으신가요?{" "}
-              <Link to="/login" className="text-blue-900 hover:underline">
+              <Link
+                to="/login"
+                className="text-blue-900 hover:underline cursor-pointer"
+              >
                 로그인하러 가기
               </Link>
             </p>
