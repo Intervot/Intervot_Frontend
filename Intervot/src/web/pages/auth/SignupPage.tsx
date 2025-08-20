@@ -1,3 +1,7 @@
+import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
+import { authService } from "@/shared/services/auth/authServices";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -20,7 +24,7 @@ const SignupPage = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isValid },
   } = useForm<SignupForm>({
     mode: "onChange", // 입력값 변경 시 유효성 체크
   });
@@ -28,19 +32,47 @@ const SignupPage = () => {
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: authService.signup,
+    onSuccess: () => {
+      alert("회원가입이 완료되었습니다! 로그인 해주세요.");
+      navigate("/login");
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status === 400) {
+          const errorMessage =
+            error.response?.data?.message || "입력값이 올바르지 않습니다.";
+          alert(errorMessage);
+        } else if (status === 500) {
+          alert("서버 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+        }
+      } else {
+        alert("예상치 못한 오류가 발생했습니다.");
+      }
+    },
+  });
+
   const onSubmit = (data: SignupForm) => {
-    const { email, nickname, password } = data;
-
-    const signupRequestData: SignupRequest = {
-      email,
-      nickname,
-      password,
+    const signupData: SignupRequest = {
+      email: data.email,
+      nickname: data.nickname,
+      password: data.password,
     };
-
-    console.log(signupRequestData);
-    navigate("/login");
+    mutate(signupData);
   };
 
+  if (isPending) {
+    return (
+      <LoadingSpinner
+        overlay={true}
+        size="lg"
+        color="blue"
+        text="회원가입 중입니다...."
+      />
+    );
+  }
   return (
     <div className="w-[80%] mx-auto in-h-screen flex flex-col items-center justify-start mb-30">
       <div className="mx-auto w-[50%] text-3xl font-bold mb-10 mt-15">
@@ -114,9 +146,9 @@ const SignupPage = () => {
                 required: "비밀번호는 필수 입력값입니다.",
                 pattern: {
                   value:
-                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{10,}$/,
                   message:
-                    "비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.",
+                    "비밀번호는 영문, 숫자, 특수문자를 포함한 10자 이상이어야 합니다.",
                 },
               })}
               placeholder="비밀번호를 입력해 주세요"
@@ -167,10 +199,10 @@ const SignupPage = () => {
           {/* 회원가입 버튼 */}
           <button
             type="submit"
-            disabled={!isValid || isSubmitting}
+            disabled={!isValid || isPending}
             className={`w-full py-3 rounded-md border border-blue-900 text-sm font-medium transition-colors mb-3
               ${
-                !isValid || isSubmitting
+                !isValid || isPending
                   ? "bg-gray-300 text-white border-gray-300 cursor-not-allowed"
                   : "bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50 cursor-pointer"
               }`}

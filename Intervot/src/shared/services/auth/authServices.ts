@@ -69,9 +69,10 @@ export const authService = {
     password: string;
   }): Promise<void> => {
     try {
-      axios.post(`${API_BASE_URL}/api/auth/signup`, params);
+      await axios.post(`${API_BASE_URL}/api/auth/signup`, params);
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
 };
