@@ -1,6 +1,6 @@
-// import axios from "axios";
+import axios from "axios";
 
-// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 interface LoginResponse {
   accessToken: string;
@@ -61,6 +61,17 @@ export const authService = {
     } else {
       console.log("❌ 더미 로그인 실패: 잘못된 자격증명");
       throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.");
+    }
+  },
+  signup: async (params: {
+    email: string;
+    nickname: string;
+    password: string;
+  }): Promise<void> => {
+    try {
+      axios.post(`${API_BASE_URL}/api/auth/signup`, params);
+    } catch (error) {
+      console.log(error);
     }
   },
 };
