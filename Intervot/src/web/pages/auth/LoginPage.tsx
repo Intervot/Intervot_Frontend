@@ -26,7 +26,7 @@ const LoginPage = () => {
     mutationFn: authService.login,
     onSuccess: (response) => {
       const userInfo = {
-        nickname: response.nickname,
+        nickname: response?.nickname,
       };
 
       const tokens = {

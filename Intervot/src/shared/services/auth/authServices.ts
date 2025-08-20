@@ -18,7 +18,8 @@ export const authService = {
       );
       return response.data;
     } catch (error) {
-      console.warn("실제 API 호출 실패", error);
+      console.warn("API 호출 실패", error);
+      throw error;
     }
 
     // 실제 API 지연 시뮬레이션 (선택사항)

@@ -9,7 +9,7 @@ interface Tokens {
 
 // 사용자 정보 인터페이스
 interface UserInfo {
-  nickname: string;
+  nickname: string | undefined;
 }
 
 // 전체 인증 상태 인터페이스
