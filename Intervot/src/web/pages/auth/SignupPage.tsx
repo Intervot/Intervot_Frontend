@@ -26,7 +26,7 @@ const SignupPage = () => {
     watch,
     formState: { errors, isValid },
   } = useForm<SignupForm>({
-    mode: "onChange", // 입력값 변경 시 유효성 체크
+    mode: "onChange",
   });
 
   const password = watch("password");

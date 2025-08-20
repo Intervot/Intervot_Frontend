@@ -20,7 +20,7 @@ const LoginPage = () => {
     formState: { errors, isValid, isSubmitting },
     trigger,
   } = useForm<LoginForm>({
-    mode: "onChange", // 입력이 변경될 때마다 유효성 검사
+    mode: "onChange",
   });
   const { mutate, isPending } = useMutation({
     mutationFn: authService.login,
