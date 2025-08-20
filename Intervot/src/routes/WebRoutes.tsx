@@ -2,13 +2,13 @@ import LoginPage from "@/web/pages/auth/LoginPage";
 import SignupPage from "@/web/pages/auth/SignupPage";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/shared/stores/userStore";
-import ReportPage from "@/web/pages/Report/ReportPage";
+import ReportPage from "@/web/pages/report/ReportPage";
 import MypagePage from "@/web/pages/MypagePage";
 import { ReactNode, useEffect } from "react";
 import Header from "@/web/layouts/Header";
 import ErrorPage from "@/shared/pages/ErrorPage";
-import InterviewSetupPage from "@/web/pages/Interview/InterviewSetupPage";
-import InterviewPage from "@/web/pages/Interview/InterviewPage";
+import InterviewSetupPage from "@/web/pages/interview/InterviewSetupPage";
+import InterviewPage from "@/web/pages/interview/InterviewPage";
 
 interface LayoutWrapperProps {
   children: ReactNode;
