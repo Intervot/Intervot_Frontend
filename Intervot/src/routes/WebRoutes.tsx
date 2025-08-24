@@ -22,7 +22,8 @@ const AuthMonitor = () => {
   useEffect(() => {
     const currentPath = window.location.pathname;
     const isAuthPage = currentPath === "/login" || currentPath === "/signup";
-    if (!isAuthPage && (!isAuthenticated || !accessToken)) {
+    const isMainPage = currentPath === "/";
+    if (!isMainPage && !isAuthPage && (!isAuthenticated || !accessToken)) {
       navigate("/login", { replace: true });
     }
   }, [isAuthenticated, accessToken, navigate]);
