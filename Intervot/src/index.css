@@ -1,1 +1,5 @@
 @import "tailwindcss";
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important; /* 원하는 색상 */
+  -webkit-text-fill-color: black; /* 텍스트 색상 */
+}
