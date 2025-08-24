@@ -3,11 +3,25 @@ import MobileRoutes from "./routes/MobileRoutes";
 import WebRoutes from "./routes/WebRoutes";
 
 function App() {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(() => {
+    const isMobileDevice =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    const isSmallScreen = window.innerWidth <= 768;
+
+    return isMobileDevice || isSmallScreen;
+  });
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const isMobileDevice =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      const isSmallScreen = window.innerWidth <= 768;
+
+      setIsMobile(isMobileDevice || isSmallScreen);
     };
 
     window.addEventListener("resize", handleResize);
