@@ -2,7 +2,7 @@ import LoginPage from "@/app/pages/auth/LoginPage";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/shared/stores/userStore";
 import ReportPage from "@/web/pages/report/ReportPage";
-import MypagePage from "@/web/pages/MypagePage";
+import MypagePage from "@/web/pages/mypage/MypagePage";
 import { ReactNode, useEffect } from "react";
 import Header from "@/web/layouts/Header";
 import ErrorPage from "@/shared/pages/ErrorPage";

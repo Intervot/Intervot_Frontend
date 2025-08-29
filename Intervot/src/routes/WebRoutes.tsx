@@ -3,7 +3,7 @@ import SignupPage from "@/web/pages/auth/SignupPage";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/shared/stores/userStore";
 import ReportPage from "@/web/pages/report/ReportPage";
-import MypagePage from "@/web/pages/MypagePage";
+import MypagePage from "@/web/pages/mypage/MypagePage";
 import { ReactNode, useEffect } from "react";
 import Header from "@/web/layouts/Header";
 import ErrorPage from "@/shared/pages/ErrorPage";
@@ -55,7 +55,7 @@ const WebRoutes = () => {
           element={<div className="text-red-500">웹 메인 페이지</div>}
         />
         <Route
-          path="/interview_setup"
+          path="/interview/setup"
           element={
             isAuthenticated ? (
               <InterviewSetupPage />
