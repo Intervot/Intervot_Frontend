@@ -1,17 +1,17 @@
 import { UseFormRegister, FieldError } from "react-hook-form";
+import { LoginFormData } from "@/shared/types/auth/login";
 
-type LoginForm = {
-  email: string;
-  password: string;
-};
-
-interface PasswordInputProps {
-  register: UseFormRegister<LoginForm>;
+interface LoginPasswordInputProps {
+  register: UseFormRegister<LoginFormData>;
   error?: FieldError;
-  trigger: () => Promise<boolean>;
+  trigger: (name: keyof LoginFormData) => Promise<boolean>;
 }
 
-const PasswordInput = ({ register, error, trigger }: PasswordInputProps) => {
+const LoginPasswordInput = ({
+  register,
+  error,
+  trigger,
+}: LoginPasswordInputProps) => {
   return (
     <div>
       <label className="block font-light text-gray-400 mb-1">비밀번호</label>
@@ -21,7 +21,7 @@ const PasswordInput = ({ register, error, trigger }: PasswordInputProps) => {
         {...register("password", {
           required: "비밀번호는 필수 입력값입니다.",
         })}
-        onBlur={() => trigger()}
+        onBlur={() => trigger("password")}
         className={`w-full p-3 border rounded-md mb-1 text-gray-700 bg-white border-gray-300 focus:outline-none focus:border-gray-400 focus:ring-0 transition-colors duration-150 ${
           error ? "border-red-500" : ""
         }`}
@@ -34,4 +34,4 @@ const PasswordInput = ({ register, error, trigger }: PasswordInputProps) => {
   );
 };
 
-export default PasswordInput;
+export default LoginPasswordInput;

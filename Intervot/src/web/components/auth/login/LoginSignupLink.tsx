@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const SignupLink = () => {
+const LoginSignupLink = () => {
   return (
     <div className="text-center">
       <p className="text-gray-600">
@@ -13,4 +13,4 @@ const SignupLink = () => {
   );
 };
 
-export default SignupLink;
+export default LoginSignupLink;

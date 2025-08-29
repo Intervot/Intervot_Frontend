@@ -1,19 +1,24 @@
-import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/shared/stores/userStore";
+import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/shared/services/auth/authServices";
 import axios from "axios";
 import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
+import { LoginFormData } from "@/shared/types/auth/login";
 import LoginForm from "@/web/components/auth/login/LoginForm";
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
 
 const LoginPage = () => {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+    trigger,
+  } = useForm<LoginFormData>({
+    mode: "onBlur",
+  });
 
   const { mutate, isPending } = useMutation({
     mutationFn: authService.login,
@@ -34,7 +39,8 @@ const LoginPage = () => {
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
-        if (status === 401) {
+        console.log("Login error status:", status);
+        if (status === 400) {
           alert("일치하는 정보가 없습니다.");
         } else if (status === 500) {
           alert("서버 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
@@ -47,7 +53,7 @@ const LoginPage = () => {
     },
   });
 
-  const handleSubmit = (data: LoginFormData) => {
+  const onSubmit = (data: LoginFormData) => {
     mutate(data);
   };
 
@@ -66,7 +72,16 @@ const LoginPage = () => {
     <div className="min-h-screen w-[80%] m-auto flex flex-col items-center justify-start">
       <h1 className="text-3xl font-bold mb-9 mt-25">로그인</h1>
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg border border-gray-200 p-10">
-        <LoginForm onSubmit={handleSubmit} isLoading={isPending} />
+        <LoginForm
+          handleSubmit={handleSubmit}
+          register={register}
+          errors={errors}
+          isValid={isValid}
+          isSubmitting={isSubmitting}
+          isPending={isPending}
+          trigger={trigger}
+          onSubmit={onSubmit}
+        />
       </div>
     </div>
   );

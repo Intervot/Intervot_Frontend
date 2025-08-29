@@ -1,40 +1,53 @@
-import { useLoginForm } from "../../../../shared/hooks/auth/login/useLoginForm";
-import EmailInput from "./components/EmailInput";
-import PasswordInput from "./components/PasswordInput";
-import LoginButton from "./components/LoginButton";
-import SignupLink from "./components/SignupLink";
-
-type LoginForm = {
-  email: string;
-  password: string;
-};
+import {
+  UseFormHandleSubmit,
+  UseFormRegister,
+  FieldErrors,
+} from "react-hook-form";
+import { LoginFormData } from "@/shared/types/auth/login";
+import LoginEmailInput from "./LoginEmailInput";
+import LoginPasswordInput from "./LoginPasswordInput";
+import LoginButton from "./LoginButton";
+import LoginSignupLink from "./LoginSignupLink";
 
 interface LoginFormProps {
-  onSubmit: (data: LoginForm) => void;
-  isLoading: boolean;
+  handleSubmit: UseFormHandleSubmit<LoginFormData>;
+  register: UseFormRegister<LoginFormData>;
+  errors: FieldErrors<LoginFormData>;
+  isValid: boolean;
+  isSubmitting: boolean;
+  isPending: boolean;
+  trigger: (name: keyof LoginFormData) => Promise<boolean>;
+  onSubmit: (data: LoginFormData) => void;
 }
 
-const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
-  const { register, handleSubmit, errors, isValid, trigger } = useLoginForm();
-
-  const handleFormSubmit = (data: LoginForm) => {
-    onSubmit(data);
-  };
-
+const LoginForm = ({
+  handleSubmit,
+  register,
+  errors,
+  isValid,
+  isSubmitting,
+  isPending,
+  trigger,
+  onSubmit,
+}: LoginFormProps) => {
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-2">
-      <EmailInput
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+      <LoginEmailInput
         register={register}
         error={errors.email}
-        trigger={() => trigger("email")}
+        trigger={trigger}
       />
-      <PasswordInput
+      <LoginPasswordInput
         register={register}
         error={errors.password}
-        trigger={() => trigger("password")}
+        trigger={trigger}
       />
-      <LoginButton isValid={isValid} isLoading={isLoading} />
-      <SignupLink />
+      <LoginButton
+        isValid={isValid}
+        isSubmitting={isSubmitting}
+        isPending={isPending}
+      />
+      <LoginSignupLink />
     </form>
   );
 };

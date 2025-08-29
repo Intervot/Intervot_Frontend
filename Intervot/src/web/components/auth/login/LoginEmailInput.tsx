@@ -1,17 +1,17 @@
 import { UseFormRegister, FieldError } from "react-hook-form";
+import { LoginFormData } from "@/shared/types/auth/login";
 
-type LoginForm = {
-  email: string;
-  password: string;
-};
-
-interface EmailInputProps {
-  register: UseFormRegister<LoginForm>;
+interface LoginEmailInputProps {
+  register: UseFormRegister<LoginFormData>;
   error?: FieldError;
-  trigger: () => Promise<boolean>;
+  trigger: (name: keyof LoginFormData) => Promise<boolean>;
 }
 
-const EmailInput = ({ register, error, trigger }: EmailInputProps) => {
+const LoginEmailInput = ({
+  register,
+  error,
+  trigger,
+}: LoginEmailInputProps) => {
   return (
     <div>
       <label className="block font-light text-gray-400 mb-1">이메일</label>
@@ -25,7 +25,7 @@ const EmailInput = ({ register, error, trigger }: EmailInputProps) => {
             message: "유효한 이메일을 입력해주세요.",
           },
         })}
-        onBlur={() => trigger()}
+        onBlur={() => trigger("email")}
         className={`w-full p-3 border rounded-md mb-1 text-gray-700 bg-white border-gray-300 focus:outline-none focus:border-gray-400 focus:ring-0 transition-colors duration-150 ${
           error ? "border-red-500" : ""
         }`}
@@ -38,4 +38,4 @@ const EmailInput = ({ register, error, trigger }: EmailInputProps) => {
   );
 };
 
-export default EmailInput;
+export default LoginEmailInput;
