@@ -1,10 +1,10 @@
-import { useDummyStore } from "@/shared/stores/dummyStore";
+import { useAuthStore } from "@/shared/stores/userStore";
 import { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
 export const setupRequestInterceptor = (apiClient: AxiosInstance) => {
   apiClient.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      const { accessToken, isAuthenticated } = useDummyStore.getState();
+      const { accessToken, isAuthenticated } = useAuthStore.getState();
 
       if (isAuthenticated && accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;

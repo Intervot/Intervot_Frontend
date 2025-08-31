@@ -1,13 +1,1 @@
-{
-  "root": [
-    "./src/app.tsx",
-    "./src/main.tsx",
-    "./src/vite-env.d.ts",
-    "./src/routes/mobileroutes.tsx",
-    "./src/routes/webroutes.tsx",
-    "./src/web/layouts/header.tsx",
-    "./src/web/pages/loginpage.tsx",
-    "./src/web/pages/signuppage.tsx"
-  ],
-  "version": "5.8.3"
-}
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/app/layouts/authheader.tsx","./src/app/pages/auth/loginpage.tsx","./src/app/pages/auth/signuppage.tsx","./src/routes/mobileroutes.tsx","./src/routes/webroutes.tsx","./src/shared/components/loadingspinner.tsx","./src/shared/hooks/usesessionexpired.ts","./src/shared/pages/errorpage.tsx","./src/shared/services/api/apiclient.ts","./src/shared/services/api/setuprequestinterceptor.ts","./src/shared/services/api/setupresponseinterceptor.ts","./src/shared/services/auth/authservices.ts","./src/shared/stores/userstore.ts","./src/shared/types/auth/login.ts","./src/shared/types/auth/signup.ts","./src/web/components/auth/login/loginbutton.tsx","./src/web/components/auth/login/loginemailinput.tsx","./src/web/components/auth/login/loginform.tsx","./src/web/components/auth/login/loginpasswordinput.tsx","./src/web/components/auth/login/loginsignuplink.tsx","./src/web/components/auth/signup/signupform.tsx","./src/web/constants/menutabs.ts","./src/web/constants/setup_levels.ts","./src/web/constants/setup_roles.ts","./src/web/layouts/header.tsx","./src/web/mock/analysistexts.ts","./src/web/mock/mockquestions.ts","./src/web/pages/auth/loginpage.tsx","./src/web/pages/auth/signuppage.tsx","./src/web/pages/interview/interviewpage.tsx","./src/web/pages/interview/interviewsetuppage.tsx","./src/web/pages/mypage/mypagepage.tsx","./src/web/pages/report/reportpage.tsx"],"version":"5.8.3"}

@@ -1,5 +1,6 @@
 import axios from "axios";
-
+import { setupRequestInterceptor } from "./setupRequestInterceptor";
+import { setupResponseInterceptor } from "./setupResponseInterceptor";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const apiClient = axios.create({
@@ -8,11 +9,6 @@ export const apiClient = axios.create({
 });
 
 export const setupInterceptors = async () => {
-  const { setupRequestInterceptor } = await import("./setupRequestInterceptor");
-  const { setupResponseInterceptor } = await import(
-    "./setupResponseInterceptor"
-  );
-
   setupRequestInterceptor(apiClient);
   setupResponseInterceptor(apiClient);
 };
