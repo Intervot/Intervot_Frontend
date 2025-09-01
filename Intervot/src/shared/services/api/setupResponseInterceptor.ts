@@ -1,25 +1,13 @@
-import { useDummyStore } from "@/shared/stores/dummyStore";
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from "axios";
+import { useAuthStore } from "@/shared/stores/userStore";
 
 interface RetryableAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
+// 인터셉터에서의 토큰 갱신 Promise를 관리
 let interceptorRefreshPromise: Promise<string> | null = null;
-export const dummyRefreshToken = async (
-  refreshToken: string
-): Promise<{ accessToken: string; accessTokenExpiresAt: string }> => {
-  console.log("[더미] 토큰 갱신 요청", refreshToken);
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return {
-    accessToken: "new-dummy-access-token",
-    accessTokenExpiresAt: new Date(Date.now() + 1000 * 60 * 60).toISOString(),
-  };
-};
 
-export const dummyLogout = async () => {
-  console.log("[더미] 로그아웃 호출");
-};
 export const setupResponseInterceptor = (apiClient: AxiosInstance) => {
   apiClient.interceptors.response.use(
     (response) => response,
@@ -30,19 +18,22 @@ export const setupResponseInterceptor = (apiClient: AxiosInstance) => {
         originalRequest._retry = true;
 
         try {
-          const store = useDummyStore.getState();
+          const store = useAuthStore.getState();
 
           if (!store.refreshToken) {
-            throw new Error("리프레시 토큰이 없습니다. 로그아웃 처리합니다.");
+            throw new Error("No refresh token available");
           }
 
           let newAccessToken: string;
 
+          // 이미 인터셉터에서 토큰 갱신 중이면 대기
           if (interceptorRefreshPromise) {
-            console.log("🔄 만료후 인터셉터 토큰 갱신 진행 중... 대기");
+            console.log("🔄 인터셉터 토큰 갱신 진행 중... 대기");
             newAccessToken = await interceptorRefreshPromise;
-          } else if (store.isRefreshing) {
-            console.log("🔄 만료전 사전 토큰 갱신 진행 중... 잠시 대기");
+          }
+          // store에서 토큰 갱신 중이면 대기
+          else if (store.isRefreshing) {
+            console.log("🔄 스토어에서 토큰 갱신 진행 중... 대기");
 
             let waitCount = 0;
             while (store.isRefreshing && waitCount < 50) {
@@ -50,53 +41,44 @@ export const setupResponseInterceptor = (apiClient: AxiosInstance) => {
               waitCount++;
             }
 
-            if (!store.isRefreshing && store.accessToken) {
+            if (store.accessToken) {
               newAccessToken = store.accessToken;
             } else {
-              throw new Error(
-                "사전 토큰 갱신 실패 또는 토큰이 없습니다. 로그아웃 처리합니다."
-              );
+              throw new Error("Store token refresh failed");
             }
-          } else {
-            interceptorRefreshPromise = (async (): Promise<string> => {
-              try {
-                store.clearRefreshTimer();
+          }
+          // 새로운 토큰 갱신 시작
+          else {
+            console.log("🚨 401 에러 발생 - 인터셉터에서 토큰 갱신 시작");
 
-                const tokenResponse = await dummyRefreshToken(
-                  store.refreshToken!
-                );
+            interceptorRefreshPromise = store.refreshTokens();
 
-                store.updateAccessToken(
-                  tokenResponse.accessToken,
-                  tokenResponse.accessTokenExpiresAt
-                );
-
-                store.scheduleTokenRefresh();
-
-                console.log("✅ 인터셉터 토큰 갱신 완료");
-                return tokenResponse.accessToken;
-              } finally {
-                interceptorRefreshPromise = null;
-              }
-            })();
-
-            newAccessToken = await interceptorRefreshPromise;
+            try {
+              newAccessToken = await interceptorRefreshPromise;
+            } finally {
+              interceptorRefreshPromise = null;
+            }
           }
 
+          // 새 토큰으로 원래 요청 재시도
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return apiClient(originalRequest);
         } catch (refreshError) {
           console.error("❌ 인터셉터 토큰 갱신 실패:", refreshError);
 
-          interceptorRefreshPromise = null;
+          const store = useAuthStore.getState();
 
           try {
-            await dummyLogout();
+            await store.logout();
           } catch (logoutError) {
-            console.error("로그아웃 호출 실패:", logoutError);
+            console.error("로그아웃 API 호출 실패:", logoutError);
           }
 
+          store.logout({ showAlert: true, redirect: true });
+
           return Promise.reject(refreshError);
+        } finally {
+          interceptorRefreshPromise = null;
         }
       }
 

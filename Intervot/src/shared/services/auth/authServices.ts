@@ -1,4 +1,5 @@
 import axios from "axios";
+import { apiClient } from "../api/apiClient";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -8,7 +9,10 @@ interface LoginResponse {
   refreshToken: string;
   nickname: string;
 }
-
+interface RefreshTokenResponse {
+  accessToken: string;
+  accessTokenExpiresAt: number;
+}
 export const authService = {
   login: async (params: { email: string; password: string }) => {
     try {
@@ -21,9 +25,6 @@ export const authService = {
       console.warn("API 호출 실패", error);
       throw error;
     }
-
-    // 실제 API 지연 시뮬레이션 (선택사항)
-    await new Promise((resolve) => setTimeout(resolve, 300));
   },
   signup: async (params: {
     email: string;
@@ -36,5 +37,21 @@ export const authService = {
       console.log(error);
       throw error;
     }
+  },
+  logout: async (): Promise<void> => {
+    try {
+      await apiClient.post("/auth/logout");
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  },
+  refresh: async (refreshToken: string): Promise<RefreshTokenResponse> => {
+    const response = await apiClient.post<RefreshTokenResponse>(
+      `${API_BASE_URL}/auth/refresh`,
+      { refreshToken }
+    );
+    console.log(response.data);
+
+    return response.data;
   },
 };

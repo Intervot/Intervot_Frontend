@@ -23,6 +23,8 @@ const LoginPage = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: authService.login,
     onSuccess: (response) => {
+      console.log(response);
+
       const userInfo = {
         nickname: response?.nickname,
       };
