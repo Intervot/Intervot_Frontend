@@ -14,11 +14,22 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isSubmitting },
+    watch,
+    formState: { errors, isSubmitting },
     trigger,
   } = useForm<LoginFormData>({
     mode: "onBlur",
   });
+
+  const watchedValues = watch();
+
+  // 이메일과 비밀번호가 모두 입력되었고 유효한지 확인
+  const isFormValid = Boolean(
+    watchedValues.email &&
+      watchedValues.password &&
+      !errors.email &&
+      !errors.password
+  );
 
   const { mutate, isPending } = useMutation({
     mutationFn: authService.login,
@@ -78,7 +89,7 @@ const LoginPage = () => {
           handleSubmit={handleSubmit}
           register={register}
           errors={errors}
-          isValid={isValid}
+          isValid={isFormValid}
           isSubmitting={isSubmitting}
           isPending={isPending}
           trigger={trigger}
