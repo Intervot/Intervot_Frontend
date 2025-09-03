@@ -76,7 +76,7 @@ const LoginPage = () => {
         overlay={true}
         size="lg"
         color="blue"
-        text="로그인중입니다...."
+        text="로그인 중입니다...."
       />
     );
   }

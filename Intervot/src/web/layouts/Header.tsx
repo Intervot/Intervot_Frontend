@@ -4,6 +4,10 @@ import logo from "@/shared/assets/png/edited_logo.png";
 import { Link } from "react-router-dom";
 import MENUTABS from "../constants/MENUTABS";
 import { useAuthStore } from "@/shared/stores/userStore";
+import { useMutation } from "@tanstack/react-query";
+import { authService } from "@/shared/services/auth/authServices";
+import axios from "axios";
+import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -12,12 +16,49 @@ const Header = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const userName = useAuthStore((state) => state.user?.nickname);
   const logout = useAuthStore((state) => state.logout);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: authService.logout,
+    onSuccess: (response) => {
+      setIsDropdownOpen(false);
+      console.log(response);
+      logout();
+      navigate("/login");
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        console.log("Logout error status:", status);
+        if (status === 401) {
+          console.warn("이미 로그아웃 상태입니다.");
+          alert("이미 로그아웃된 상태입니다.");
+          navigate("/login");
+        } else if (status === 500) {
+          alert(
+            "서버 오류로 로그아웃이 정상 처리되지 않았습니다. 잠시 후 다시 시도해주세요."
+          );
+        }
+      } else {
+        alert("예상치 못한 오류가 발생했습니다.");
+      }
+    },
+  });
+
   // 로그아웃 핸들러
   const handleLogout = () => {
-    setIsDropdownOpen(false);
-    logout();
-    navigate("/login");
+    mutate();
   };
+
+  if (isPending) {
+    return (
+      <LoadingSpinner
+        overlay={true}
+        size="lg"
+        color="blue"
+        text="로그아웃 중입니다...."
+      />
+    );
+  }
 
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
