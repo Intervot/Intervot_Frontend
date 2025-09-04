@@ -4,14 +4,9 @@ import { LoginFormData } from "@/shared/types/auth/login";
 interface LoginEmailInputProps {
   register: UseFormRegister<LoginFormData>;
   error?: FieldError;
-  trigger: (name: keyof LoginFormData) => Promise<boolean>;
 }
 
-const LoginEmailInput = ({
-  register,
-  error,
-  trigger,
-}: LoginEmailInputProps) => {
+const LoginEmailInput = ({ register, error }: LoginEmailInputProps) => {
   return (
     <div>
       <label className="block font-light text-gray-400 mb-1">이메일</label>
@@ -25,15 +20,13 @@ const LoginEmailInput = ({
             message: "유효한 이메일을 입력해주세요.",
           },
         })}
-        onBlur={() => trigger("email")}
-        className={`w-full p-3 border rounded-md mb-1 text-gray-700 bg-white border-gray-300 focus:outline-none focus:border-gray-400 focus:ring-0 transition-colors duration-150 ${
-          error ? "border-red-500" : ""
+        className={`w-full p-3 border rounded-md mb-1 border-gray-300 text-gray-700 bg-white focus:outline-none focus:ring-0 transition-colors duration-150 ${
+          error ? "border-red-500" : "focus:border-gray-400"
         }`}
       />
-      {error && (
-        <p className="text-sm text-red-500 min-h-[20px]">{error.message}</p>
-      )}
-      {!error && <div className="min-h-[20px]" />}
+      <div className="min-h-[20px]">
+        {error && <p className="text-sm text-red-500">{error.message}</p>}
+      </div>
     </div>
   );
 };

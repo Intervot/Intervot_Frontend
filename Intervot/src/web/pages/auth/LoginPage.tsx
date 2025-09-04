@@ -15,10 +15,9 @@ const LoginPage = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isSubmitting },
-    trigger,
+    formState: { errors },
   } = useForm<LoginFormData>({
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   const watchedValues = watch();
@@ -90,9 +89,7 @@ const LoginPage = () => {
           register={register}
           errors={errors}
           isValid={isFormValid}
-          isSubmitting={isSubmitting}
           isPending={isPending}
-          trigger={trigger}
           onSubmit={onSubmit}
         />
       </div>
