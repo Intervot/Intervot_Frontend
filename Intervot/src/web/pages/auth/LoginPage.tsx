@@ -18,6 +18,7 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<LoginFormData>({
     mode: "onChange",
+    reValidateMode: "onBlur",
   });
 
   const watchedValues = watch();

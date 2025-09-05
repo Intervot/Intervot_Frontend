@@ -15,12 +15,6 @@ const LoginPasswordInput = ({ register, error }: LoginPasswordInputProps) => {
         placeholder="비밀번호를 입력해 주세요"
         {...register("password", {
           required: "비밀번호는 필수 입력값입니다.",
-          pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{10,}$/,
-            message:
-              "비밀번호는 대소문자, 특수문자를 포함한 10자 이상이어야 합니다.",
-          },
         })}
         className={`w-full p-3 border rounded-md mb-1 border-gray-300 text-gray-700 bg-white focus:outline-none focus:ring-0 transition-colors duration-150 ${
           error ? "border-red-500" : "focus:border-gray-400"

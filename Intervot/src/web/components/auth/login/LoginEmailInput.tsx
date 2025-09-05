@@ -21,7 +21,7 @@ const LoginEmailInput = ({ register, error }: LoginEmailInputProps) => {
           },
         })}
         className={`w-full p-3 border rounded-md mb-1 border-gray-300 text-gray-700 bg-white focus:outline-none focus:ring-0 transition-colors duration-150 ${
-          error ? "border-red-500" : "focus:border-gray-400"
+          error ? "border-red-500" : ""
         }`}
       />
       <div className="min-h-[20px]">
