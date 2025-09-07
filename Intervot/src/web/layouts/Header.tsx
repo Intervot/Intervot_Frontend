@@ -30,9 +30,14 @@ const Header = () => {
         const status = error.response?.status;
         console.log("Logout error status:", status);
         if (status === 401) {
-          console.warn("이미 로그아웃 상태입니다.");
-          alert("이미 로그아웃된 상태입니다.");
+          // 리프레시 토큰 만료 또는 액세스 토큰 누락
+          console.warn("인증 토큰이 만료되었거나 유효하지 않습니다.");
+          alert("세션이 만료되었습니다. 다시 로그인해주세요.");
           navigate("/login");
+        } else if (status === 400) {
+          // 잘못된 요청값
+          console.error("잘못된 요청입니다.");
+          alert("요청이 올바르지 않습니다. 다시 시도해주세요.");
         } else if (status === 500) {
           alert(
             "서버 오류로 로그아웃이 정상 처리되지 않았습니다. 잠시 후 다시 시도해주세요."
