@@ -80,7 +80,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="w-full m-auto flex flex-col items-center justify-start">
+    <div className="w-[90%] m-auto flex flex-col items-center justify-start">
       <div className="w-full mb-9 mt-10">
         <p className="text-3xl font-bold mb-2">안녕하세요</p>
         <p className="text-3xl font-bold mb-4"> 인터봇입니다.</p>

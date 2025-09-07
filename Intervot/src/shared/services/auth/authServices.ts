@@ -9,10 +9,12 @@ interface LoginResponse {
   refreshToken: string;
   nickname: string;
 }
+
 interface RefreshTokenResponse {
   accessToken: string;
   accessTokenExpiresAt: number;
 }
+
 export const authService = {
   login: async (params: { email: string; password: string }) => {
     try {
@@ -26,6 +28,7 @@ export const authService = {
       throw error;
     }
   },
+
   signup: async (params: {
     email: string;
     nickname: string;
@@ -38,20 +41,27 @@ export const authService = {
       throw error;
     }
   },
+
   logout: async (): Promise<void> => {
     try {
-      await apiClient.post("/auth/logout");
+      await apiClient.post(`${API_BASE_URL}/api/auth/logout`);
     } catch (error) {
-      console.error("로그아웃 실패:", error);
+      console.error("❌ 로그아웃 API 실패:", error);
+      throw error;
     }
   },
-  refresh: async (refreshToken: string): Promise<RefreshTokenResponse> => {
-    const response = await apiClient.post<RefreshTokenResponse>(
-      `${API_BASE_URL}/auth/refresh`,
-      { refreshToken }
-    );
-    console.log(response.data);
 
-    return response.data;
+  refresh: async (refreshToken: string): Promise<RefreshTokenResponse> => {
+    try {
+      const response = await apiClient.post<RefreshTokenResponse>(
+        `${API_BASE_URL}/api/auth/refresh`,
+        { refreshToken }
+      );
+      console.log("✅ 토큰 갱신 API 성공:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("❌ 토큰 갱신 API 실패:", error);
+      throw error;
+    }
   },
 };

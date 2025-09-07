@@ -26,9 +26,6 @@ const AuthHeader = () => {
         <Link
           className="flex items-center cursor-pointer p-2"
           to={navigationPath}
-          onClick={() =>
-            console.log("Link 클릭됨, 이동할 경로:", navigationPath)
-          }
         >
           <img src={arrow} alt="뒤로가기 버튼" className="w-6 h-6" />
         </Link>
