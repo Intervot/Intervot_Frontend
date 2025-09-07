@@ -24,7 +24,11 @@ interface AuthState {
 
   // 액션들
   login: (user: UserInfo, tokens: Tokens) => void;
-  logout: (options?: { showAlert?: boolean; redirect?: boolean }) => void;
+  logout: (options?: {
+    showAlert?: boolean;
+    redirect?: boolean;
+    callApi?: boolean;
+  }) => Promise<void>;
   updateAccessToken: (accessToken: string, expiresAt?: number) => void;
   refreshTokens: () => Promise<string>; // 토큰 갱신을 외부에서도 사용할 수 있게
   scheduleTokenRefresh: () => void;
@@ -76,14 +80,7 @@ const createTokenRefreshFunction = (getState: () => AuthState) => {
 
       return response.accessToken;
     } catch (error) {
-      console.error("❌ 토큰 갱신 실패:", error);
-
-      // 갱신 실패 시 세션 만료 처리
-      store.logout({
-        showAlert: true,
-        redirect: true,
-      });
-
+      console.error("❌ 토큰 갱신 실패 유저 스토어:", error);
       throw error;
     } finally {
       store.setRefreshing(false);
@@ -133,8 +130,12 @@ export const useAuthStore = create<AuthState>()(
           get().scheduleTokenRefresh();
         },
 
-        logout: (options = {}) => {
-          const { showAlert = false, redirect = true } = options;
+        logout: async (options = {}) => {
+          const {
+            showAlert = false,
+            redirect = true,
+            callApi = true,
+          } = options;
 
           // 타이머 정리
           const currentTimer = get().refreshTimer;
@@ -142,8 +143,19 @@ export const useAuthStore = create<AuthState>()(
             clearTimeout(currentTimer);
           }
 
-          console.log("🚪 로그아웃 처리");
+          console.log("🚪 로그아웃 처리 시작");
 
+          // API 호출 여부 결정
+          if (callApi) {
+            try {
+              await authService.logout(); // 서버에 로그아웃 요청
+            } catch (error) {
+              console.error("❌ 로그아웃 API 호출 실패:", error);
+              // API 실패해도 클라이언트 로그아웃은 계속 진행
+            }
+          }
+
+          // 클라이언트 상태 초기화
           set({
             user: null,
             accessToken: null,
@@ -154,6 +166,8 @@ export const useAuthStore = create<AuthState>()(
             isRefreshing: false,
           });
 
+          console.log("✅ 클라이언트 로그아웃 완료");
+
           // 세션 만료 알림 (옵션)
           if (showAlert) {
             alert("세션이 만료되었습니다. 다시 로그인해주세요.");
@@ -161,7 +175,6 @@ export const useAuthStore = create<AuthState>()(
 
           // 로그인 페이지로 리다이렉트 (옵션)
           if (redirect && typeof window !== "undefined") {
-            // replace를 사용해서 뒤로가기 방지
             window.location.replace("/login");
           }
         },

@@ -85,7 +85,7 @@ const SignupPage = () => {
     );
   }
   return (
-    <div className="w-full m-auto flex flex-col items-center justify-start">
+    <div className="w-[90%] m-auto flex flex-col items-center justify-start">
       <div className="w-full mb-9 mt-10">
         <p className="text-2xl font-bold mb-2">환영합니다!</p>
         <p className="text-2xl font-bold mb-3">

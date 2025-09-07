@@ -1,15 +1,22 @@
 import LoginPage from "@/app/pages/auth/LoginPage";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { useAuthStore } from "@/shared/stores/userStore";
 import ReportPage from "@/web/pages/report/ReportPage";
 import MypagePage from "@/web/pages/mypage/MypagePage";
 import { ReactNode, useEffect } from "react";
-import Header from "@/web/layouts/Header";
+import Header from "@/app/layouts/Header";
 import ErrorPage from "@/shared/pages/ErrorPage";
 import InterviewSetupPage from "@/web/pages/interview/InterviewSetupPage";
 import InterviewPage from "@/web/pages/interview/InterviewPage";
 import AuthHeader from "@/app/layouts/AuthHeader";
 import SignupPage from "@/app/pages/auth/SignupPage";
+import Footer from "@/app/layouts/Footer";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -19,18 +26,20 @@ const AuthMonitor = () => {
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const accessToken = useAuthStore((state) => state.accessToken);
+  const location = useLocation();
 
   useEffect(() => {
-    const currentPath = window.location.pathname;
+    const currentPath = location.pathname;
     const isAuthPage = currentPath === "/login" || currentPath === "/signup";
     const isMainPage = currentPath === "/";
     if (!isMainPage && !isAuthPage && (!isAuthenticated || !accessToken)) {
       navigate("/login", { replace: true });
     }
-  }, [isAuthenticated, accessToken, navigate]);
+  }, [isAuthenticated, accessToken, navigate, location.pathname]);
 
   return null;
 };
+
 const NotFoundPage = () => {
   return (
     <ErrorPage
@@ -84,13 +93,19 @@ const MobileRoutes = () => {
 };
 
 const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
-  const currentPath = window.location.pathname;
+  const location = useLocation();
+  const currentPath = location.pathname;
   const isAuthPage = currentPath === "/login" || currentPath === "/signup";
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   return (
-    <main className="flex-1 w-[70%] m-auto min-h-[684px]">
+    <div className="min-h-screen flex flex-col">
       {isAuthPage ? <AuthHeader /> : <Header />}
-      <div>{children}</div>
-    </main>
+
+      <main className="flex-1 w-full">{children}</main>
+
+      {!isAuthPage && isAuthenticated && <Footer />}
+    </div>
   );
 };
 

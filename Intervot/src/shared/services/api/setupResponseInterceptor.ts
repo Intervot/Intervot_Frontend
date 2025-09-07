@@ -1,11 +1,11 @@
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "@/shared/stores/userStore";
+import { authService } from "@/shared/services/auth/authServices";
 
 interface RetryableAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
-// 인터셉터에서의 토큰 갱신 Promise를 관리
 let interceptorRefreshPromise: Promise<string> | null = null;
 
 export const setupResponseInterceptor = (apiClient: AxiosInstance) => {
@@ -26,14 +26,11 @@ export const setupResponseInterceptor = (apiClient: AxiosInstance) => {
 
           let newAccessToken: string;
 
-          // 이미 인터셉터에서 토큰 갱신 중이면 대기
           if (interceptorRefreshPromise) {
             console.log("🔄 인터셉터 토큰 갱신 진행 중... 대기");
             newAccessToken = await interceptorRefreshPromise;
-          }
-          // store에서 토큰 갱신 중이면 대기
-          else if (store.isRefreshing) {
-            console.log("🔄 스토어에서 토큰 갱신 진행 중... 대기");
+          } else if (store.isRefreshing) {
+            console.log("🔄 사전 토큰 갱신 진행 중... 잠시 대기");
 
             let waitCount = 0;
             while (store.isRefreshing && waitCount < 50) {
@@ -41,44 +38,82 @@ export const setupResponseInterceptor = (apiClient: AxiosInstance) => {
               waitCount++;
             }
 
-            if (store.accessToken) {
+            if (!store.isRefreshing && store.accessToken) {
               newAccessToken = store.accessToken;
             } else {
-              throw new Error("Store token refresh failed");
+              throw new Error(
+                "Pre-refresh failed, starting interceptor refresh"
+              );
             }
+          } else {
+            console.log("🚨 401 에러 발생 - 인터셉터에서 토큰 긴급 갱신");
+
+            interceptorRefreshPromise = (async (): Promise<string> => {
+              try {
+                store.clearRefreshTimer();
+
+                const tokenResponse = await authService.refresh(
+                  store.refreshToken!
+                );
+
+                store.updateAccessToken(
+                  tokenResponse.accessToken,
+                  tokenResponse.accessTokenExpiresAt
+                );
+
+                store.scheduleTokenRefresh();
+
+                console.log("✅ 인터셉터 토큰 갱신 완료");
+                return tokenResponse.accessToken;
+              } finally {
+                interceptorRefreshPromise = null;
+              }
+            })();
+
+            newAccessToken = await interceptorRefreshPromise;
           }
-          // 새로운 토큰 갱신 시작
-          else {
-            console.log("🚨 401 에러 발생 - 인터셉터에서 토큰 갱신 시작");
 
-            interceptorRefreshPromise = store.refreshTokens();
-
-            try {
-              newAccessToken = await interceptorRefreshPromise;
-            } finally {
-              interceptorRefreshPromise = null;
-            }
-          }
-
-          // 새 토큰으로 원래 요청 재시도
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return apiClient(originalRequest);
         } catch (refreshError) {
           console.error("❌ 인터셉터 토큰 갱신 실패:", refreshError);
 
+          interceptorRefreshPromise = null;
+
           const store = useAuthStore.getState();
 
-          try {
-            await store.logout();
-          } catch (logoutError) {
-            console.error("로그아웃 API 호출 실패:", logoutError);
+          const isAxiosError = (error: unknown): error is AxiosError => {
+            return (
+              typeof error === "object" && error !== null && "response" in error
+            );
+          };
+
+          if (
+            isAxiosError(refreshError) &&
+            refreshError.response?.status === 401
+          ) {
+            console.warn("⚠️ Refresh Token 만료 - 로그아웃 처리");
+
+            await store.logout({
+              showAlert: true,
+              redirect: true,
+              callApi: false,
+            });
+          } else {
+            try {
+              await authService.logout();
+            } catch (logoutError) {
+              console.error("로그아웃 API 호출 실패:", logoutError);
+            }
+
+            await store.logout({
+              showAlert: true,
+              redirect: true,
+              callApi: false,
+            });
           }
 
-          store.logout({ showAlert: true, redirect: true });
-
           return Promise.reject(refreshError);
-        } finally {
-          interceptorRefreshPromise = null;
         }
       }
 
