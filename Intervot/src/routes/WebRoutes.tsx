@@ -9,6 +9,7 @@ import Header from "@/web/layouts/Header";
 import ErrorPage from "@/shared/pages/ErrorPage";
 import InterviewSetupPage from "@/web/pages/interview/InterviewSetupPage";
 import InterviewPage from "@/web/pages/interview/InterviewPage";
+import MainPage from "@/shared/pages/MainPage";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -50,10 +51,7 @@ const WebRoutes = () => {
       <Routes>
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/"
-          element={<div className="text-red-500">웹 메인 페이지</div>}
-        />
+        <Route path="/" element={<MainPage />} />
         <Route
           path="/interview/setup"
           element={

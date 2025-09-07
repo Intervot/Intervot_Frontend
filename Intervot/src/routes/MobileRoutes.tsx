@@ -17,7 +17,7 @@ import InterviewPage from "@/web/pages/interview/InterviewPage";
 import AuthHeader from "@/app/layouts/AuthHeader";
 import SignupPage from "@/app/pages/auth/SignupPage";
 import Footer from "@/app/layouts/Footer";
-
+import MainPage from "@/shared/pages/MainPage";
 interface LayoutWrapperProps {
   children: ReactNode;
 }
@@ -60,10 +60,7 @@ const MobileRoutes = () => {
       <Routes>
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/"
-          element={<div className="text-red-500">모바일 메인 페이지</div>}
-        />
+        <Route path="/" element={<MainPage />} />
         <Route
           path="/interview_setup"
           element={
