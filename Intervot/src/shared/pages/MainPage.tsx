@@ -29,7 +29,7 @@ const MainPage = () => {
                 </div>
                 <Link
                   className="flex items-center justify-between gap-2 border border-gray-300 p-2 rounded-md hover:bg-gray-100 w-[60%]"
-                  to=""
+                  to="/interview/setup"
                 >
                   <div className="text-gray-400 font-semibold text-xs">
                     AI면접 시작하기
@@ -57,7 +57,7 @@ const MainPage = () => {
                 </div>
                 <Link
                   className="flex items-center justify-between gap-2 border border-gray-300 p-2 rounded-md hover:bg-gray-100 w-[60%]"
-                  to=""
+                  to="/questions/frequent"
                 >
                   <div className="text-gray-400 font-semibold text-xs">
                     빈출질문 바로가기
@@ -85,7 +85,7 @@ const MainPage = () => {
                 </div>
                 <Link
                   className="flex items-center justify-between gap-2 border border-gray-300 p-2 rounded-md hover:bg-gray-100 w-[60%]"
-                  to=""
+                  to="/questions/competency"
                 >
                   <div className="text-gray-400 font-semibold text-xs">
                     역량면접 시작하기
