@@ -1,14 +1,17 @@
 import LoginPage from "@/web/pages/auth/LoginPage";
 import SignupPage from "@/web/pages/auth/SignupPage";
+import Header from "@/web/layouts/Header";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/shared/stores/userStore";
-import ReportPage from "@/web/pages/report/ReportPage";
-import MypagePage from "@/web/pages/mypage/MypagePage";
-import { ReactNode, useEffect } from "react";
-import Header from "@/web/layouts/Header";
-import ErrorPage from "@/shared/pages/ErrorPage";
 import InterviewSetupPage from "@/web/pages/interview/InterviewSetupPage";
 import InterviewPage from "@/web/pages/interview/InterviewPage";
+import ReportPage from "@/web/pages/report/ReportPage";
+import CompetencyQuestionsPage from "@/web/pages/questions/CompetencyQuestionsPage";
+import FrequentQuestionsPage from "@/web/pages/questions/FrequentQuestionsPage";
+import FaqPage from "@/web/pages/other/FaqPage";
+import MypagePage from "@/web/pages/mypage/MypagePage";
+import { ReactNode, useEffect } from "react";
+import ErrorPage from "@/shared/pages/ErrorPage";
 import MainPage from "@/shared/pages/MainPage";
 
 interface LayoutWrapperProps {
@@ -52,24 +55,16 @@ const WebRoutes = () => {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<MainPage />} />
-        <Route
-          path="/interview/setup"
-          element={
-            isAuthenticated ? (
-              <InterviewSetupPage />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+        <Route path="/interview/setup" element={<InterviewSetupPage />} />
         <Route path="/interview/:role/:level" element={<InterviewPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route
-          path="/mypage"
-          element={
-            isAuthenticated ? <MypagePage /> : <Navigate to="/login" replace />
-          }
+          path="/questions/competency"
+          element={<CompetencyQuestionsPage />}
         />
+        <Route path="/questions/frequent" element={<FrequentQuestionsPage />} />
+        <Route path="/other/faq" element={<FaqPage />} />
+        <Route path="/mypage" element={<MypagePage />} />
         <Route path="/404" element={<NotFoundPage />} />
         <Route
           path="*"
