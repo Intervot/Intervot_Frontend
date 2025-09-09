@@ -90,8 +90,8 @@ const Header = () => {
                     <span
                       className={`cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
                       ${
-                        location.pathname.startsWith(
-                          group.items.map((i) => i.path)[0]
+                        group.items.some((i) =>
+                          location.pathname.startsWith(i.path)
                         )
                           ? "text-blue-900 font-semibold"
                           : "text-gray-700 hover:text-blue-900"
@@ -205,7 +205,7 @@ const Header = () => {
                       onClick={() => {
                         handleLogout();
                       }}
-                      className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:text-red-600 hover:bg-red-50 transition-all duration-150"
+                      className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:text-red-600 hover:bg-red-50 transition-all duration-150 cursor-pointer "
                     >
                       <svg
                         className="w-4 h-4 mr-3"

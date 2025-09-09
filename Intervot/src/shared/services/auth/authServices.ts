@@ -24,7 +24,7 @@ export const authService = {
       );
       return response.data;
     } catch (error) {
-      console.warn("API 호출 실패", error);
+      console.warn("❌ 로그인 API 실패", error);
       throw error;
     }
   },
@@ -37,7 +37,7 @@ export const authService = {
     try {
       await axios.post(`${API_BASE_URL}/api/auth/signup`, params);
     } catch (error) {
-      console.log(error);
+      console.warn("❌ 회원가입 API 실패", error);
       throw error;
     }
   },
