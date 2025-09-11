@@ -2,15 +2,41 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SETUP_ROLES } from "@/web/constants/SETUP_ROLES";
 import { SETUP_LEVELS } from "@/web/constants/SETUP_LEVELS";
+import { useMutation } from "@tanstack/react-query";
+import { interviewService } from "@/shared/services/interview/interviewServices";
+import axios from "axios";
 
 const InterviewSetupPage = () => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const { mutate } = useMutation({
+    mutationFn: interviewService.startInterview,
+    onSuccess: (response) => {
+      const questionId = response.question_id;
+      navigate(`/interview/${selectedRole}/${selectedLevel}/${questionId}`);
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        console.log("Login error status:", status);
+        if (status === 400) {
+          alert("요청값이 올바르지 않습니다.");
+        } else if (status === 500) {
+          alert("서버 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+        } else if (status === 404) {
+          alert("요청한 API를 찾을 수 없습니다.");
+        } else {
+          alert("예상치 못한 오류가 발생했습니다.");
+        }
+      }
+    },
+  });
+
   const handleStart = () => {
     if (selectedRole && selectedLevel) {
-      navigate(`/interview/${selectedRole}/${selectedLevel}`);
+      mutate({ role: selectedRole, level: selectedLevel });
     }
   };
 
