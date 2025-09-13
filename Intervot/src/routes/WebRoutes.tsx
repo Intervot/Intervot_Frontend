@@ -82,7 +82,7 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   return (
     <main>
       <Header />
-      <div className="flex-1 w-[60%] mx-auto min-h-[684px]">{children}</div>
+      <div className="flex-1 w-[65%] mx-auto min-h-[684px]">{children}</div>
     </main>
   );
 };
