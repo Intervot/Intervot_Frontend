@@ -8,7 +8,7 @@ function App() {
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
-    const isSmallScreen = window.innerWidth <= 768;
+    const isSmallScreen = window.innerWidth <= 1024;
 
     return isMobileDevice || isSmallScreen;
   });
@@ -19,7 +19,7 @@ function App() {
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent
         );
-      const isSmallScreen = window.innerWidth <= 768;
+      const isSmallScreen = window.innerWidth <= 1024;
 
       setIsMobile(isMobileDevice || isSmallScreen);
     };
