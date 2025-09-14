@@ -18,6 +18,7 @@ import AuthHeader from "@/app/layouts/AuthHeader";
 import SignupPage from "@/app/pages/auth/SignupPage";
 import Footer from "@/app/layouts/Footer";
 import MainPage from "@/shared/pages/MainPage";
+
 interface LayoutWrapperProps {
   children: ReactNode;
 }
@@ -93,15 +94,18 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
   const isAuthPage = currentPath === "/login" || currentPath === "/signup";
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
     <div className="min-h-screen flex flex-col">
       {isAuthPage ? <AuthHeader /> : <Header />}
 
-      <main className="flex-1 w-full">{children}</main>
+      <main className="flex-1">{children}</main>
 
-      {!isAuthPage && isAuthenticated && <Footer />}
+      {!isAuthPage && (
+        <div className="sticky bottom-0 z-10">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 };
