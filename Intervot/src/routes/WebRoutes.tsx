@@ -6,6 +6,7 @@ import { useAuthStore } from "@/shared/stores/userStore";
 import InterviewSetupPage from "@/web/pages/interview/InterviewSetupPage";
 import InterviewPage from "@/web/pages/interview/InterviewPage";
 import ReportPage from "@/web/pages/report/ReportPage";
+import CompetencySelectPage from "@/web/pages/questions/CompetencySelectPage";
 import CompetencyQuestionsPage from "@/web/pages/questions/CompetencyQuestionsPage";
 import FrequentQuestionsPage from "@/web/pages/questions/FrequentQuestionsPage";
 import FaqPage from "@/web/pages/other/FaqPage";
@@ -63,6 +64,10 @@ const WebRoutes = () => {
         <Route path="/report" element={<ReportPage />} />
         <Route
           path="/questions/competency"
+          element={<CompetencySelectPage />}
+        />
+        <Route
+          path="/questions/competency/:strength"
           element={<CompetencyQuestionsPage />}
         />
         <Route path="/questions/frequent" element={<FrequentQuestionsPage />} />
