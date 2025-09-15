@@ -5,25 +5,25 @@ import FAQs from "@/shared/assets/png/FAQs.png";
 import AI_logo from "@/shared/assets/png/AI_logo.png";
 import { useAuthStore } from "../stores/userStore";
 import qna from "@/shared/assets/png/qna.png";
-import AnnouncementCarousel from "@/web/components/main/AnnouncementCarousel";
-import AIInterviewScoreProgress from "@/web/components/main/AIInterviewScoreProgress";
+import AnnouncementCarousel from "@/shared/components/main/AnnouncementCarousel";
+import AIInterviewScoreProgress from "@/shared/components/main/AIInterviewScoreProgress";
 
 const MainPage = () => {
   const userName = useAuthStore((state) => state.user?.nickname);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   return (
     <>
-      <div className="my-3 p-2 w-full">
-        <div className="h-[400px]">
+      <div className="lg:my-3 p-2 w-full">
+        <div className="lg:h-[400px]">
           <div className="flex flex-col lg:flex-row h-full gap-[10px]">
             <div className="w-full lg:w-[60%] flex flex-col">
               <AnnouncementCarousel />
-              <div className="h-[50%] w-full flex border border-blue-100 rounded-md flex-1 bg-[#f0f9ff]">
+              <div className="h-[70%] w-full flex border border-blue-100 rounded-md lg:flex-1 bg-[#f0f9ff]">
                 <div className="w-full flex flex-col px-4 py-0 justify-center">
-                  <p className="text-xs  font-bold text-gray-600">
+                  <p className="text-sm lg:text-xs font-bold text-gray-600">
                     인터봇과 함께 면접 쉽게 준비하기!
                   </p>
-                  <p className="text-sm xl:text-2xl font-bold my-3 text-gray-800 leading-relaxed">
+                  <p className="sm:text-lg md:text-3xl xl:text-2xl lg:text-xs font-bold my-3 text-gray-800 leading-relaxed">
                     내가 선택한 직무별 면접 질문을
                     <br /> 인터봇과 함께 연습해보세요.
                   </p>
@@ -49,8 +49,27 @@ const MainPage = () => {
                 </div>
               </div>
             </div>
-
-            <div className="w-full lg:w-[40%] p-2 md:p-4">
+            <div className="lg:hidden">
+              {!isAuthenticated && (
+                <div className="min-h-[120px] bg-white border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-bold text-gray-700 text-sm">
+                      AI 면접 점수 확인하기
+                    </h3>
+                  </div>
+                  <p className="text-xs text-gray-500 leading-relaxed mb-5">
+                    AI 면접을 완료하고 실시간 피드백과 점수를 확인해보세요
+                  </p>
+                  <Link
+                    className=" m-auto flex flex-col items-center justify-center rounded-lg w-[50%] bg-blue-900 text-white font-bold text-base md:text-lg h-[45px] md:h-[50px] cursor-pointer hover:border hover:border-blue-900 hover:bg-white hover:text-blue-900 transition-colors"
+                    to="/login"
+                  >
+                    로그인
+                  </Link>
+                </div>
+              )}
+            </div>
+            <div className="w-full lg:w-[40%] p-2 ">
               {isAuthenticated ? (
                 <div className="flex flex-col gap-[15px]">
                   <div className="flex items-center gap-[10px]">
@@ -68,10 +87,10 @@ const MainPage = () => {
                       </div>
                     </div>
                   </div>
-                  <AIInterviewScoreProgress score={""} />
+                  <AIInterviewScoreProgress score={75} />
                 </div>
               ) : (
-                <div className="p-4 flex flex-col gap-[15px] md:gap-[20px] items-center justify-center m-auto border border-gray-300 rounded-lg min-h-[120px] md:min-h-[50%] mb-4">
+                <div className="hidden lg:flex p-4 flex-col gap-[15px] md:gap-[20px] items-center justify-center m-auto border border-gray-300 rounded-lg min-h-[120px] md:min-h-[50%] mb-4">
                   <p className="font-bold text-gray-500 text-sm md:text-base text-center">
                     로그인하고 인터봇을 이용해주세요.
                   </p>
@@ -83,8 +102,9 @@ const MainPage = () => {
                   </Link>
                 </div>
               )}
-              <div className="min-h-[150px] lg:h-[calc(50%-10px)] rounded-lg bg-gray-100">
-                <div className="p-3 md:p-4 h-full flex flex-col">
+
+              <div className="hidden lg:flex min-h-[150px] lg:h-[calc(50%-10px)] rounded-lg bg-gray-100">
+                <div className="p-3 md:p-4 h-full  w-full flex flex-col">
                   <div className="flex items-start md:items-center flex-1">
                     <div className="flex-1">
                       <h3 className="font-bold text-gray-700 mb-2 text-xs xl:text-md">
