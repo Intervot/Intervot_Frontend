@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import strengths from "@/web/constants/COMPETENCY_STRENGTHS";
 
 const CompetencySelectPage = () => {
   const [selectedStrength, setSelectedStrength] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const handleStart = () => {
+    if (selectedStrength) {
+      navigate(`/questions/competency/${selectedStrength}`);
+    }
+  };
 
   return (
     <div className="py-5">
@@ -36,20 +42,20 @@ const CompetencySelectPage = () => {
           </div>
         )}
       </div>
+      {/* 시작 버튼 */}
       <div className="flex justify-center">
-        <Link
-          to={
-            selectedStrength ? `/questions/competency/${selectedStrength}` : "#"
-          }
+        <button
+          onClick={handleStart}
+          disabled={!selectedStrength}
           className={`px-8 py-3 border rounded-lg font-semibold text-white transition cursor-pointer
-              ${
-                selectedStrength
-                  ? " bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50 "
-                  : "bg-gray-300 text-white border-gray-300 cursor-not-allowed"
-              }`}
+            ${
+              selectedStrength
+                ? " bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50 "
+                : "bg-gray-300 text-white border-gray-300 cursor-not-allowed"
+            }`}
         >
-          시작하기
-        </Link>
+          면접 시작하기
+        </button>
       </div>
     </div>
   );
