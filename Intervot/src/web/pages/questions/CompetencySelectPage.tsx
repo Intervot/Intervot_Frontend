@@ -54,7 +54,7 @@ const CompetencySelectPage = () => {
                 : "bg-gray-300 text-white border-gray-300 cursor-not-allowed"
             }`}
         >
-          면접 시작하기
+          역량 질문 분석하기
         </button>
       </div>
     </div>
