@@ -149,7 +149,10 @@ const MainPage = () => {
         <div className="h-[400px]">
           <div className="font-bold text-lg mb-4">인터봇 매칭</div>
           <div className=" h-[80%] flex justify-between gap-4">
-            <div className="border border-gray-300 rounded-md w-[31%] overflow-hidden hover:shadow-md transition-shado">
+            <Link
+              to="/interview/setup"
+              className="border border-gray-300 rounded-md w-[31%] overflow-hidden hover:shadow-md transition-shado"
+            >
               <div className="h-[50%] bg-red-200 overflow-hidden">
                 <img
                   src={aiInterview}
@@ -165,19 +168,19 @@ const MainPage = () => {
                 <div className="font-semibold text-xs xl:text-sm mb-3 text-gray-600">
                   AI 면접으로 미리 연습해 볼래요?
                 </div>
-                <Link
-                  className="flex items-center justify-between w-full border border-gray-300 p-2 rounded-md hover:bg-gray-50 transition-colors"
-                  to="/interview/setup"
-                >
+                <div className="flex items-center justify-between w-full border border-gray-300 p-2 rounded-md transition-colors">
                   <span className="text-gray-600 font-semibold text-xs">
                     AI면접 시작하기
                   </span>
                   <span className="text-gray-400 text-xs">→</span>
-                </Link>
+                </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="border border-gray-300 rounded-md w-[31%] overflow-hidden hover:shadow-md transition-shado">
+            <Link
+              to="/questions/frequent"
+              className="border border-gray-300 rounded-md w-[31%] overflow-hidden hover:shadow-md transition-shado"
+            >
               <div className="h-[50%] bg-orange-200 overflow-hidden">
                 <img
                   src={FAQs}
@@ -193,19 +196,19 @@ const MainPage = () => {
                 <div className="font-semibold text-xs xl:text-sm mb-3 text-gray-600">
                   진짜 많이 나오는 질문만 모아봤어요
                 </div>
-                <Link
-                  className="flex items-center justify-between w-full border border-gray-300 p-2 rounded-md hover:bg-gray-50 transition-colors"
-                  to="/questions/frequent"
-                >
+                <div className="flex items-center justify-between w-full border border-gray-300 p-2 rounded-md transition-colors">
                   <span className="text-gray-600 font-semibold text-xs">
                     빈출질문 바로가기
                   </span>
                   <span className="text-gray-400 text-xs">→</span>
-                </Link>
+                </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="border border-gray-300 rounded-md w-[31%] overflow-hidden hover:shadow-md transition-shadow">
+            <Link
+              to="/questions/competency"
+              className="border border-gray-300 rounded-md w-[31%] overflow-hidden hover:shadow-md transition-shadow"
+            >
               <div className="h-[50%] bg-green-200 overflow-hidden">
                 <img
                   src={competency}
@@ -222,17 +225,14 @@ const MainPage = () => {
                 <div className="font-semibold text-xs xl:text-sm mb-3 text-gray-600">
                   의도를 알면 답변 방향이 달라져요
                 </div>
-                <Link
-                  className="flex items-center justify-between w-full border border-gray-300 p-2 rounded-md hover:bg-gray-50 transition-colors"
-                  to="/questions/competency"
-                >
+                <div className="flex items-center justify-between w-full border border-gray-300 p-2 rounded-md transition-colors">
                   <span className="text-gray-600 font-semibold text-xs">
                     역량질문 확인하기
                   </span>
                   <span className="text-gray-400 text-xs">→</span>
-                </Link>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
