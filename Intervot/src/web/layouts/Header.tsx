@@ -230,10 +230,10 @@ const Header = () => {
         ) : (
           <div className="flex w-full justify-end gap-4">
             <Link
-              className="px-4 py-2 rounded-md text-sm font-medium bg-blue-900 text-white hover:border hover:border-blue-900 hover:bg-white hover:text-blue-900 transition-colors"
+              className="text-xs text-gray-600 font-bold border p-2 border-gray-300 rounded-md hover:bg-gray-100"
               to="/login"
             >
-              로그인
+              로그인/회원가입
             </Link>
           </div>
         )}
