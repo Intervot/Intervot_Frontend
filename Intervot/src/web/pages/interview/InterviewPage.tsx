@@ -1,16 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import mockQuestions from "@/web/mock/mockQuestions";
+import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
+import { useGetInterview } from "@/shared/hooks/useGetInterview ";
+
+interface Question {
+  id: string;
+  keyword: string[];
+  content: string;
+}
 
 const InterviewPage = () => {
-  const { level } = useParams<{ level: string }>();
+  const { role, level, questionId } = useParams<{
+    role: string;
+    level: string;
+    questionId: string;
+  }>();
   const navigate = useNavigate();
-  const [answers, setAnswers] = useState<string[]>(
-    Array(mockQuestions.length).fill("")
-  );
+  const [answers, setAnswers] = useState<string[]>([]);
+
+  // questionId로 면접 데이터 조회
+  const { data: interviewData, isLoading } = useGetInterview(questionId || "");
+
+  const questions = interviewData?.questions || [];
+
+  // 답변 배열 초기화
+  useEffect(() => {
+    if (questions.length > 0) {
+      setAnswers(Array(questions.length).fill(""));
+    }
+  }, [questions.length]);
 
   // level에 따른 글자 제한 설정
-  const getMaxLength = (levelValue: string) => {
+  const getMaxLength = (levelValue: string): number => {
     switch (levelValue) {
       case "beginner":
         return 300;
@@ -30,31 +51,44 @@ const InterviewPage = () => {
     (answer) => answer.trim().length > 0
   );
 
-  const handleAnswerChange = (index: number, value: string) => {
+  const handleAnswerChange = (index: number, value: string): void => {
     const updatedAnswers = [...answers];
     updatedAnswers[index] = value;
     setAnswers(updatedAnswers);
   };
 
-  const handleSubmit = () => {
-    // 답변 데이터를 report 페이지로 전달
+  const handleSubmit = (): void => {
     navigate("/report", {
       state: {
         answers,
-        questions: mockQuestions,
+        questions,
+        role: role || "",
         level: level || "beginner",
+        questionId: questionId || "",
       },
     });
   };
+
+  // 로딩 중일 때
+  if (isLoading) {
+    return (
+      <LoadingSpinner
+        overlay={true}
+        size="lg"
+        color="blue"
+        text="면접 데이터 로딩중..."
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen">
       <div className="flex flex-col items-center justify-start mt-8">
         <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="space-y-8">
-            {mockQuestions.map((question, index) => (
+            {questions.map((question: Question, index: number) => (
               <div
-                key={index}
+                key={question.id}
                 className="border-b border-gray-100 pb-8 last:border-b-0"
               >
                 <div className="mb-3 text-sm text-gray-500 font-medium">
@@ -63,16 +97,16 @@ const InterviewPage = () => {
 
                 {/* 질문 */}
                 <h2 className="text-xl font-semibold mb-4 text-gray-800 leading-relaxed">
-                  {question}
+                  {question.content}
                 </h2>
 
                 {/* 답변 입력 */}
                 <div>
                   <label className="block font-light mb-2 text-gray-400">
-                    답변 ({answers[index].length}/{maxLength}자)
+                    답변 ({answers[index]?.length || 0}/{maxLength}자)
                   </label>
                   <textarea
-                    value={answers[index]}
+                    value={answers[index] || ""}
                     onChange={(e) => {
                       const value = e.target.value;
                       if (value.length <= maxLength) {

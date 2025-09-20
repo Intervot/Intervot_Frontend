@@ -58,7 +58,7 @@ const WebRoutes = () => {
         <Route path="/" element={<MainPage />} />
         <Route path="/interview/setup" element={<InterviewSetupPage />} />
         <Route
-          path="/interview/:role/:level/:question_id"
+          path="/interview/:role/:level/:questionId"
           element={<InterviewPage />}
         />
         <Route path="/report" element={<ReportPage />} />
