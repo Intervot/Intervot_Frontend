@@ -1,42 +1,31 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SETUP_ROLES } from "@/web/constants/SETUP_ROLES";
-import { SETUP_LEVELS } from "@/web/constants/SETUP_LEVELS";
-import { useMutation } from "@tanstack/react-query";
-import { interviewService } from "@/shared/services/interview/interviewServices";
-import axios from "axios";
+import { SETUP_ROLES } from "@/shared/constants/SETUP_ROLES";
+import { SETUP_LEVELS } from "@/shared/constants/SETUP_LEVELS";
+import { useCreateInterview } from "@/shared/hooks/useCreateInterview ";
 
 const InterviewSetupPage = () => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const navigate = useNavigate();
-
-  const { mutate } = useMutation({
-    mutationFn: interviewService.startInterview,
-    onSuccess: (response) => {
-      const questionId = response.question_id;
-      navigate(`/interview/${selectedRole}/${selectedLevel}/${questionId}`);
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status;
-        console.log("Login error status:", status);
-        if (status === 400) {
-          alert("요청값이 올바르지 않습니다.");
-        } else if (status === 500) {
-          alert("서버 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
-        } else if (status === 404) {
-          alert("요청한 API를 찾을 수 없습니다.");
-        } else {
-          alert("예상치 못한 오류가 발생했습니다.");
-        }
-      }
-    },
-  });
-
-  const handleStart = () => {
+  const { mutate: createInterview, isPending } = useCreateInterview();
+  const handleStart = (): void => {
     if (selectedRole && selectedLevel) {
-      mutate({ role: selectedRole, level: selectedLevel });
+      createInterview(
+        { role: selectedRole, level: selectedLevel },
+        {
+          onSuccess: (response) => {
+            // 생성된 questionId로 면접 페이지 이동
+            navigate(
+              `/interview/${selectedRole}/${selectedLevel}/${response.questionId}`
+            );
+          },
+          onError: (error) => {
+            console.error("면접 생성 실패:", error);
+            alert("면접 생성에 실패했습니다. 다시 시도해주세요.");
+          },
+        }
+      );
     }
   };
 
@@ -51,12 +40,15 @@ const InterviewSetupPage = () => {
           <button
             key={role.value}
             onClick={() => setSelectedRole(role.value)}
+            disabled={isPending}
             className={`border rounded-md py-2 px-4 text-sm transition cursor-pointer
               ${
                 selectedRole === role.value
                   ? "border-blue-500 bg-blue-50 text-blue-600"
                   : "border-gray-300 bg-white hover:border-blue-300"
-              }`}
+              }
+              ${isPending ? "opacity-50 cursor-not-allowed" : ""}
+            `}
           >
             {role.label}
           </button>
@@ -70,12 +62,15 @@ const InterviewSetupPage = () => {
           <button
             key={level.value}
             onClick={() => setSelectedLevel(level.value)}
+            disabled={isPending}
             className={`border rounded-md py-2 px-6 text-sm transition cursor-pointer
               ${
                 selectedLevel === level.value
                   ? "border-blue-500 bg-blue-50 text-blue-600"
                   : "border-gray-300 bg-white hover:border-blue-300"
-              }`}
+              }
+              ${isPending ? "opacity-50 cursor-not-allowed" : ""}
+            `}
           >
             {level.label}
           </button>
@@ -107,11 +102,11 @@ const InterviewSetupPage = () => {
       <div className="flex justify-center">
         <button
           onClick={handleStart}
-          disabled={!selectedRole || !selectedLevel}
-          className={`px-8 py-3 border rounded-lg font-semibold text-white transition cursor-pointer
+          disabled={!selectedRole || !selectedLevel || isPending}
+          className={`px-8 py-3 border rounded-lg font-semibold transition 
             ${
-              selectedRole && selectedLevel
-                ? " bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50 "
+              selectedRole && selectedLevel && !isPending
+                ? "bg-blue-900 text-white hover:bg-white hover:text-blue-900 hover:border-blue-900 hover:bg-gray-50 cursor-pointer"
                 : "bg-gray-300 text-white border-gray-300 cursor-not-allowed"
             }`}
         >
